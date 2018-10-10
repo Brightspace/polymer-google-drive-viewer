@@ -1,0 +1,30 @@
+{
+	"name": "polymer-google-drive-viewer",
+	"description": "A Polymer web component that embeds the Google Drive viewer",
+	"main": [
+		"google-drive-viewer.html",
+	],
+	"private": true,
+	"ignore": [
+		"/.*",
+		"/package.json",
+		"README.md",
+		"CODEOWNERS"
+	],
+	"dependencies": {
+		"polymer": "1 - 2"
+	},
+	"resolutions": {
+		"webcomponentsjs": "^1.0.22"
+	},
+	"variants": {
+		"1.x": {
+			"dependencies": {
+				"polymer": "^1.11.2"
+			},
+			"resolutions": {
+				"webcomponentsjs": "^0.7.24"
+			}
+		}
+	}
+}
