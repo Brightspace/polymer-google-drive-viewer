@@ -2,7 +2,7 @@
 	"name": "polymer-google-drive-viewer",
 	"description": "A Polymer web component that embeds the Google Drive viewer",
 	"main": [
-		"google-drive-viewer.html",
+		"google-drive-viewer.html"
 	],
 	"private": true,
 	"ignore": [
@@ -12,7 +12,8 @@
 		"CODEOWNERS"
 	],
 	"dependencies": {
-		"polymer": "1 - 2"
+		"polymer": "1 - 2",
+		"d2l-polymer-siren-behaviors": "Brightspace/polymer-siren-behaviors#^0.1.0"
 	},
 	"resolutions": {
 		"webcomponentsjs": "^1.0.22"

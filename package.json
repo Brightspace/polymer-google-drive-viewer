@@ -5,8 +5,7 @@
 	"private": true,
 	"scripts": {
 		"postinstall": "polymer install --variants",
-		"lint": "polymer lint && eslint *.html",
-		"serve": "polymer serve"
+		"lint": "polymer lint && eslint *.html"
 	},
 	"repository": {
 		"type": "git",
