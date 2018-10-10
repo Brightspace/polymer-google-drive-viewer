@@ -6,7 +6,7 @@ A Polymer web component that embeds the Google Drive viewer
 
 ### Properties
 The `<google-drive-viewer>` component takes in the following properties:
-* `href` - The href of either an `activity` or a `sequenced-activity`
+* `href` - The href of either an `activity` or a `sequenced-activity` that contains a fully resolved `activity` subentity
 * `token` - An OAuth2 token
 * `fra-endpoint` *(Optional)* - An override for the FRA endpoint of the Google Drive Viewer FRA
 * `deny-fullscreen` *(Optional)* - A boolean flag that prevents the iframed Google Drive document from being made fullscreen
