@@ -36,7 +36,7 @@ Polymer({
 		D2L.PolymerBehaviors.Siren.EntityBehavior
 	],
 	
-	detached: function() {
+	disconnectedCallback: function() {
 		if( this._hostPromise ) {
 			this._hostPromise.then( function( host ) {
 				host.close();
