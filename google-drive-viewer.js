@@ -1,4 +1,5 @@
 import './scripts.js';
+import '@polymer/polymer/polymer-legacy.js';
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<dom-module id="google-drive-viewer">
@@ -13,6 +14,7 @@ $_documentContainer.innerHTML = `<dom-module id="google-drive-viewer">
 	</template>
 	
 	
+<script src="https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js"></script>
 </dom-module>`;
 
 document.head.appendChild($_documentContainer.content);
@@ -36,7 +38,7 @@ Polymer({
 		D2L.PolymerBehaviors.Siren.EntityBehavior
 	],
 	
-	disconnectedCallback: function() {
+	detached: function() {
 		if( this._hostPromise ) {
 			this._hostPromise.then( function( host ) {
 				host.close();

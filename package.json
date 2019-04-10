@@ -13,7 +13,7 @@
   "name": "polymer-google-drive-viewer",
   "version": "2.1.2",
   "scripts": {
-    "lint": "npm run lint:wc && npm run lint:js",
+    "lint": "npm run lint:wc && npm run lint:js"
   },
   "author": "D2l Corporation",
   "devDependencies": {
