@@ -1,5 +1,7 @@
 import './scripts.js';
-import '@polymer/polymer/polymer-legacy.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import 'd2l-polymer-siren-behaviors/store/entity-behavior.js';
+
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<dom-module id="google-drive-viewer">
