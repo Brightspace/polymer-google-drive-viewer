@@ -3,6 +3,7 @@ import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import 'd2l-polymer-siren-behaviors/store/entity-behavior.js';
 
 const $_documentContainer = document.createElement('template');
+const ifrauImport = document.createElement( 'script' );
 
 $_documentContainer.innerHTML = `<dom-module id="google-drive-viewer">
 	<template strip-whitespace="">
@@ -16,10 +17,11 @@ $_documentContainer.innerHTML = `<dom-module id="google-drive-viewer">
 	</template>
 	
 	
-<script src="https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js"></script>
 </dom-module>`;
 
+ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js';
 document.head.appendChild($_documentContainer.content);
+document.head.appendChild(ifrauImport);
 
 Polymer({
 	is: 'google-drive-viewer',
