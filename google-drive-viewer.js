@@ -1,55 +1,58 @@
-import './scripts.js';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import 'd2l-polymer-siren-behaviors/store/entity-behavior.js';
+import { PolymerElement, html } from '@polymer/polymer';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 
-const $_documentContainer = document.createElement('template');
-const ifrauImport = document.createElement( 'script' );
-
-$_documentContainer.innerHTML = `<dom-module id="google-drive-viewer">
-	<template strip-whitespace="">
-		<style>
-			:host {
-				width: 100%;
-				height: 100%;
-				overflow: hidden;
+class GoogleDriveViewerElement extends mixinBehaviors(
+	[ D2L.PolymerBehaviors.Siren.EntityBehavior ],
+	PolymerElement
+) {
+	static get is() { return 'google-drive-viewer'; }
+	
+	static get template() {
+		const template = html`
+			<style>
+				:host {
+					width: 100%;
+					height: 100%;
+					overflow: hidden;
+				}
+			</style>
+		`;
+		template.setAttribute( 'strip-whitespace', true );
+		return template;
+	}
+	
+	static get properties() {
+		return {
+			_hostPromise: Object,
+			fraEndpoint: {
+				type: String,
+				value: 'https://s.brightspace.com/apps/google-drive-viewer-fra/2.1.2/index.html'
+			},
+			denyFullscreen: {
+				type: Boolean,
+				value: false
 			}
-		</style>
-	</template>
+		};
+	}
 	
-	
-</dom-module>`;
-
-ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js';
-document.head.appendChild($_documentContainer.content);
-document.head.appendChild(ifrauImport);
-
-Polymer({
-	is: 'google-drive-viewer',
-	
-	properties: {
-		_hostPromise: Object,
-		fraEndpoint: {
-			type: String,
-			value: 'https://s.brightspace.com/apps/google-drive-viewer-fra/2.1.2/index.html'
-		},
-		denyFullscreen: {
-			type: Boolean,
-			value: false
+	constructor() {
+		if( !window.ifrauhost ) {
+			const ifrauImport = document.createElement( 'script' );
+			ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js';
+			document.head.appendChild(ifrauImport);
 		}
-	},
+		super();
+	}
 	
-	behaviors: [
-		D2L.PolymerBehaviors.Siren.EntityBehavior
-	],
-	
-	detached: function() {
+	disconnectedCallback() {
 		if( this._hostPromise ) {
 			this._hostPromise.then( function( host ) {
 				host.close();
 			});
 			this._hostPromise = null;
 		}
-	},
+	}
 	
 	_extractFileId( entity ) {
 		if( !entity ) {
@@ -64,19 +67,23 @@ Polymer({
 			return null;
 		}
 		
-		var link = entity.getLinkByRel( 'about' );
+		const link = entity.getLinkByRel( 'about' );
 		if( !link || !link.href ) {
 			return;
 		}
 		
-		var googleDriveRegex = /^https?:\/\/(?:docs|drive)\.google\.com(?:\/a\/[^\/]+)?\/(?!forms\/)[^\/]+\/d\/([^\/\?#]{2,})(?:$|[\/\?#])/;
-		var alternateLinkFormatRegex = /^https?:\/\/(?:docs|drive)\.google\.com\/open\?id=([^&#]+)(?:$|[&#])/;
+		const googleDriveRegex = /^https?:\/\/(?:docs|drive)\.google\.com(?:\/a\/[^\/]+)?\/(?!forms\/)[^\/]+\/d\/([^\/\?#]{2,})(?:$|[\/\?#])/;
+		const alternateLinkFormatRegex = /^https?:\/\/(?:docs|drive)\.google\.com\/open\?id=([^&#]+)(?:$|[&#])/;
 		
-		var matches = googleDriveRegex.exec( link.href ) || alternateLinkFormatRegex.exec( link.href );
+		const matches = googleDriveRegex.exec( link.href ) || alternateLinkFormatRegex.exec( link.href );
 		return matches ? matches[1] : null;
-	},
+	}
 	
-	_onEntityChanged: function( entity ) {
+	_relayEvent( eventName, eventDetails ) {
+		this.dispatchEvent( new CustomEvent( eventName, { detail: eventDetails } ) );
+	}
+	
+	_onEntityChanged( entity ) {
 		if( this._hostPromise ) {
 			this._hostPromise.then( function( host ) {
 				host.close();
@@ -84,12 +91,12 @@ Polymer({
 			this._hostPromise = null;
 		}
 		
-		var fileId = this._extractFileId( entity );
+		const fileId = this._extractFileId( entity );
 		if( !fileId ) {
 			return;
 		}
 		
-		var root = this.shadowRoot;
+		const root = this.shadowRoot;
 		this._hostPromise = new window.ifrauhost(
 			function() { return root; },
 			this.fraEndpoint,
@@ -103,11 +110,11 @@ Polymer({
 			}
 		)
 		.onRequest( 'options', { fileId: fileId } )
-		.onEvent( 'initialized', this.fire.bind( this, 'initialized' ) )
-		.onEvent( 'initFailed', this.fire.bind( this, 'initFailed' ) )
-		.onEvent( 'accessDenied', this.fire.bind( this, 'accessDenied' ) )
-		.onEvent( 'fileTrashed', this.fire.bind( this, 'fileTrashed' ) )
-		.onEvent( 'found', this.fire.bind( this, 'found' ) )
+		.onEvent( 'initialized', this._relayEvent.bind( this, 'initialized' ) )
+		.onEvent( 'initFailed', this._relayEvent.bind( this, 'initFailed' ) )
+		.onEvent( 'accessDenied', this._relayEvent.bind( this, 'accessDenied' ) )
+		.onEvent( 'fileTrashed', this._relayEvent.bind( this, 'fileTrashed' ) )
+		.onEvent( 'found', this._relayEvent.bind( this, 'found' ) )
 		.connect();
 
 		this._hostPromise.then( function( host ) {
@@ -115,4 +122,6 @@ Polymer({
 		});
 	}
 	
-});
+};
+
+customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
