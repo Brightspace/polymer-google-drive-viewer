@@ -87,7 +87,7 @@ Polymer({
 			return;
 		}
 		
-		var root = this;
+		var root = this.shadowRoot;
 		this._hostPromise = new window.ifrauhost(
 			function() { return root; },
 			this.fraEndpoint,
