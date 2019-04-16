@@ -36,15 +36,6 @@ class GoogleDriveViewerElement extends mixinBehaviors(
 		};
 	}
 	
-	constructor() {
-		if( !window.ifrauhost ) {
-			const ifrauImport = document.createElement( 'script' );
-			ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js';
-			document.head.appendChild(ifrauImport);
-		}
-		super();
-	}
-	
 	disconnectedCallback() {
 		if( this._hostPromise ) {
 			this._hostPromise.then( function( host ) {
@@ -124,4 +115,13 @@ class GoogleDriveViewerElement extends mixinBehaviors(
 	
 };
 
-customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
+if( window.ifrauhost ) {
+	customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
+} else {
+	const ifrauImport = document.createElement( 'script' );
+	ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js';
+	ifrauImport.onload = function() {
+		customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
+	};
+	document.head.appendChild(ifrauImport);
+}
