@@ -27,7 +27,7 @@ class GoogleDriveViewerElement extends mixinBehaviors(
 			_hostPromise: Object,
 			fraEndpoint: {
 				type: String,
-				value: 'https://s.brightspace.com/apps/google-drive-viewer-fra/2.1.2/index.html'
+				value: 'https://s.brightspace.com/apps/google-drive-viewer-fra/2.1.3/index.html'
 			},
 			denyFullscreen: {
 				type: Boolean,
