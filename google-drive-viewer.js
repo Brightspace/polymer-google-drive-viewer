@@ -37,6 +37,10 @@ class GoogleDriveViewerElement extends mixinBehaviors(
 	}
 	
 	disconnectedCallback() {
+		this._disconnectHost();
+	}
+	
+	_disconnectHost() {
 		if( this._hostPromise ) {
 			this._hostPromise.then( function( host ) {
 				host.close();
@@ -71,16 +75,14 @@ class GoogleDriveViewerElement extends mixinBehaviors(
 	}
 	
 	_relayEvent( eventName, eventDetails ) {
+		if( eventName === 'found' ) {
+			this._disconnectHost();
+		}
 		this.dispatchEvent( new CustomEvent( eventName, { detail: eventDetails } ) );
 	}
 	
 	_onEntityChanged( entity ) {
-		if( this._hostPromise ) {
-			this._hostPromise.then( function( host ) {
-				host.close();
-			});
-			this._hostPromise = null;
-		}
+		this._disconnectHost();
 		
 		const fileId = this._extractFileId( entity );
 		if( !fileId ) {
