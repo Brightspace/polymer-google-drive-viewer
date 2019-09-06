@@ -27,7 +27,7 @@ class GoogleDriveViewerElement extends mixinBehaviors(
 			_hostPromise: Object,
 			fraEndpoint: {
 				type: String,
-				value: 'https://s.brightspace.com/apps/google-drive-viewer-fra/2.1.3/index.html'
+				value: 'https://s.brightspace.com/apps/google-drive-viewer-fra/2.2.0/index.html'
 			},
 			denyFullscreen: {
 				type: Boolean,
@@ -121,7 +121,7 @@ if( window.ifrauhost ) {
 	customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
 } else {
 	const ifrauImport = document.createElement( 'script' );
-	ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.24.0/ifrau/host.js';
+	ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.28.0/ifrau/host.js';
 	ifrauImport.onload = function() {
 		customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
 	};
