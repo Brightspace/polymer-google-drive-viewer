@@ -121,7 +121,7 @@ if( window.ifrauhost ) {
 	customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
 } else {
 	const ifrauImport = document.createElement( 'script' );
-	ifrauImport.src = 'https://s.brightspace.com/lib/ifrau/0.28.0/ifrau/host.js';
+	ifrauImport.src = `https://s.brightspace.com/lib/ifrau/0.28.0/ifrau/host.js?cacheBuster=${Date.now()}`;
 	ifrauImport.onload = function() {
 		customElements.define(GoogleDriveViewerElement.is, GoogleDriveViewerElement);
 	};
